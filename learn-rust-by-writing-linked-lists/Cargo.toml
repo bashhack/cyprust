@@ -1,0 +1,6 @@
+[package]
+name = "learn-rust-by-writing-linked-lists"
+version = "0.1.0"
+authors = ["Marc Laughton (bashhack) <info@marclaughton.com>"]
+
+[dependencies]

@@ -37,6 +37,21 @@ A homebrew lisp evaluator.
 
 ## Networking
 
+### signly
+An ASL chatbot.
+
+
+### tuxdrop
+A FTP-like transfer program.
+
+
+### big-bad-wolf
+An ```nmap``` inspired scanner
+
+
+### pypong
+Real-time pong over the wire.
+
 
 ## Security
 
