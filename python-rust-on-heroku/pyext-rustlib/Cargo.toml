@@ -1,0 +1,12 @@
+[package]
+name = "pyext-rustlib"
+version = "0.1.0"
+authors = ["Marc Laughton (bashhack) <info@marclaughton.com>"]
+
+[dependencies.pyo3]
+version = "0.2.6"
+features = ["extension-module"]
+
+[lib]
+name = "rustlib"
+crate-type = ["cdylib"]

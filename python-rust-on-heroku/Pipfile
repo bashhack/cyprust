@@ -1,0 +1,28 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[dev-packages]
+
+pytest = "*"
+pytest-benchmark = "*"
+jedi = "*"
+service-factory = "*"
+json-rpc = "*"
+importmagic = "*"
+epc = "*"
+"flake8" = "*"
+autoflake = "*"
+yapf = "*"
+
+
+[requires]
+
+python_version = "3.6"
+
+
+[packages]
+
