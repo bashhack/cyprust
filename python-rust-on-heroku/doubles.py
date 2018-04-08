@@ -4,9 +4,10 @@ import string
 from itertools import tee
 
 import rustlib
+import cythonlib
 
 
-# Python ZIP
+# Python Zip
 def count_doubles(val):
     total = 0
     for c1, c2 in zip(val, val[1:]):
@@ -23,6 +24,7 @@ def count_doubles_regex(val):
     return len(double_re.findall(val))
 
 
+# Python Itertools
 def count_doubles_functional(val):
     c1s, c2s = tee(val)
     next(c2s, None)
@@ -55,3 +57,23 @@ def test_rust(benchmark):
 
 def test_rust_fast_af(benchmark):
     benchmark(rustlib.count_doubles_fast_af, val)
+
+
+def test_naive_cython(benchmark):
+    benchmark(cythonlib.count_doubles, val)
+
+
+# def test_typed_cython(benchmark):
+#     benchmark(cythonlib.typed_count_doubles, val)
+
+
+def test_naive_cython_regex(benchmark):
+    benchmark(cythonlib.count_doubles_regex, val)
+
+
+def test_naive_cython_functional(benchmark):
+    benchmark(cythonlib.count_doubles_functional, val)
+
+
+# def test_typed_cython_functional(benchmark):
+#     benchmark(cythonlib.typed_count_doubles_functional, val)
