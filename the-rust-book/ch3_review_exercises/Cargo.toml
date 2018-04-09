@@ -1,0 +1,6 @@
+[package]
+name = "ch3_review_exercises"
+version = "0.1.0"
+authors = ["Marc Laughton (bashhack) <info@marclaughton.com>"]
+
+[dependencies]

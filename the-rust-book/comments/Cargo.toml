@@ -1,0 +1,6 @@
+[package]
+name = "comments"
+version = "0.1.0"
+authors = ["Marc Laughton (bashhack) <info@marclaughton.com>"]
+
+[dependencies]
