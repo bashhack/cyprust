@@ -1,0 +1,8 @@
+[package]
+name = "vectors_hashmaps_casting_iflet_whilelet_result_enum"
+version = "0.1.0"
+authors = ["bashhack (Marc Laughton) <info@marclaughton.com>"]
+edition = "2018"
+
+[dependencies]
+natural_constants = "0.1.0"

@@ -1,0 +1,9 @@
+[package]
+name = "control_flow_conditionals_pattern_matching"
+version = "0.1.0"
+authors = ["bashhack (Marc Laughton) <info@marclaughton.com>"]
+edition = "2018"
+
+[dependencies]
+libm = "0.1.2"
+natural_constants = "0.1.0"

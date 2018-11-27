@@ -1,0 +1,8 @@
+[package]
+name = "strings_tuples_arrays_slices_printing"
+version = "0.1.0"
+authors = ["bashhack (Marc Laughton) <info@marclaughton.com>"]
+edition = "2018"
+
+[dependencies]
+typename = "*"

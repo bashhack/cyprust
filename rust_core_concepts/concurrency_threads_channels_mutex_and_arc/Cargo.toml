@@ -1,0 +1,7 @@
+[package]
+name = "concurrency_threads_channels_mutex_and_arc"
+version = "0.1.0"
+authors = ["bashhack (Marc Laughton) <info@marclaughton.com>"]
+edition = "2018"
+
+[dependencies]
