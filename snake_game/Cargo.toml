@@ -1,0 +1,10 @@
+[package]
+name = "snake_game"
+version = "0.1.0"
+authors = ["bashhack (Marc Laughton) <info@marclaughton.com>"]
+edition = "2018"
+
+[dependencies]
+rand = "*"
+piston_window = "*"
+natural_constants = "*"
