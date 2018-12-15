@@ -11,7 +11,7 @@ const CLI_HELP_TEXT: &str = ("Usage:\n \
                               \t-h or --help to show this help message");
 const TOO_FEW_ARGS: &str = "Not enough arguments provided to program";
 const TOO_MANY_ARGS: &str = "Too many arguments provided to program";
-const MAX_PORT: u16 = 65535;
+const MAX_PORT: u16 = 65335;
 
 #[derive(Debug)]
 struct Arguments {
@@ -36,48 +36,41 @@ impl Arguments {
         // else we continue to process
         if let Ok(ipaddr) = IpAddr::from_str(&flag) {
             return Ok(Arguments { ipaddr, threads: 4 });
+        } else if flag.contains("-h") || flag.contains("--help") && args.len() == 2 {
+            println!("{}", CLI_HELP_TEXT);
+            return Err("help");
+        } else if flag.contains("-h") || flag.contains("--help") {
+            // We're here because the args count was greater than 2,
+            // but we still had a request for help - bail out
+            return Err(TOO_MANY_ARGS);
+        } else if flag.contains("-t") || flag.contains("--threads") {
+            // Assign `ipaddr`, returning its value using `from_str` method
+            // on Ipv4Addr/Ipv6Addr - we could have an a bad IP, though, so
+            // handle that, as well
+            let ipaddr = match IpAddr::from_str(&args[3]) {
+                Ok(s) => s,
+                Err(_) => return Err("Not a valid IPADDR; must be IPv4 or IPv6"),
+            };
+            // Just a simple cast to an unsigned 16-bit int, but handle error
+            // if we get junk data
+            let threads = match args[2].parse::<u16>() {
+                Ok(s) => s,
+                Err(_) => return Err("Failed to parse thread number"),
+            };
+            return Ok(Arguments { threads, ipaddr });
         } else {
-            if flag.contains("-h") || flag.contains("--help") && args.len() == 2 {
-                println!("{}", CLI_HELP_TEXT);
-                return Err("help");
-            } else if flag.contains("-h") || flag.contains("--help") {
-                // We're here because the args count was greater than 2,
-                // but we still had a request for help - bail out
-                return Err(TOO_MANY_ARGS);
-            } else if flag.contains("-t") || flag.contains("--threads") {
-                // Assign `ipaddr`, returning its value using `from_str` method
-                // on Ipv4Addr/Ipv6Addr - we could have an a bad IP, though, so
-                // handle that, as well
-                let ipaddr = match IpAddr::from_str(&args[3]) {
-                    Ok(s) => s,
-                    Err(_) => return Err("Not a valid IPADDR; must be IPv4 or IPv6"),
-                };
-                // Just a simple cast to an unsigned 16-bit int, but handle error
-                // if we get junk data
-                let threads = match args[2].parse::<u16>() {
-                    Ok(s) => s,
-                    Err(_) => return Err("Failed to parse thread number"),
-                };
-                return Ok(Arguments { threads, ipaddr });
-            } else {
-                return Err("Invalid syntax");
-            }
+            return Err("Invalid syntax");
         }
     }
 }
 
-fn scan(tx: Sender<u16>, ipaddr: IpAddr, threads: u16) {
-    // We could pass in a `start_port` but port 0 is reserved anyway....
-    // Instead, we let 1 be the starting port and increment from there.
-    let mut port: u16 = 1;
+fn scan(tx: Sender<u16>, start_port: u16, ipaddr: IpAddr, threads: u16) {
+    let mut port: u16 = start_port + 1;
     loop {
-        match TcpStream::connect((ipaddr, port)) {
-            Ok(_) => {
-                print!(".");
-                io::stdout().flush().unwrap();
-                tx.send(port).unwrap();
-            }
-            Err(_) => {}
+        if TcpStream::connect((ipaddr, port)).is_ok() {
+            print!(".");
+            io::stdout().flush().unwrap();
+            tx.send(port).unwrap();
         }
 
         if (MAX_PORT - port) <= threads {
@@ -109,14 +102,14 @@ fn main() {
     // Data sent on the Sender(tx) is available on the Receiver(rx)
     let (tx, rx) = channel();
 
-    for _ in 1..threads {
+    for i in 0..threads {
         // Sending half (tx) can only be owned by one thread,
         // we clone the Sender in order to send to other threads
         let tx = tx.clone();
 
         // Spawn off expensive computation to threads...
         thread::spawn(move || {
-            scan(tx, ipaddr, threads);
+            scan(tx, i, ipaddr, threads);
         });
     }
 
@@ -130,7 +123,7 @@ fn main() {
         out.push(port);
     }
 
-    println!("");
+    println!();
 
     out.sort();
 
